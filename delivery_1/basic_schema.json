@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "E-commerce Database",
+  "type": "object",
+  "properties": {
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "title": { "type": "string" }
+      },
+      "required": []
+    },
+    "Supplier": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "SIRET": { "type": "string" },
+        "headOffice": { "type": "string" },
+        "revenue": { "type": "number" }
+      },
+      "required": []
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "brand": { "type": "string" },
+        "description": { "type": "string" },
+        "image_url": { "type": "string", "format": "uri" },
+        "category_id": { "type": "integer" },
+        "supplier_id": { "type": "integer" }
+      },
+      "required": []
+    },
+    "Warehouse": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "address": { "type": "string" },
+        "capacity": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["id", "address", "capacity"]
+    },
+    "Client": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "last_name": { "type": "string" },
+        "first_name": { "type": "string" },
+        "address": { "type": "string" },
+        "nationality": { "type": "string" },
+        "birth_date": { "type": "string", "format": "date" },
+        "email": { "type": "string", "format": "email" }
+      },
+      "required": []
+    },
+    "Stock": {
+      "type": "object",
+      "properties": {
+        "product_id": { "type": "integer" },
+        "warehouse_id": { "type": "integer" },
+        "quantity": { "type": "integer", "minimum": 0 },
+        "location": { "type": "string" }
+      },
+      "required": []
+    },
+    "OrderLine": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "client_id": { "type": "integer" },
+        "product_id": { "type": "integer" },
+        "date": { "type": "string", "format": "date" },
+        "quantity": { "type": "integer", "minimum": 1 },
+        "delivery_date": { "type": "string", "format": "date" },
+        "comment": { "type": "string" },
+        "grade": { "type": "number", "minimum": 0, "maximum": 5 }
+      },
+      "required": []
+    }
+  }
+}
