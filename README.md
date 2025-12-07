@@ -256,16 +256,8 @@ COLLECTION SIZE BREAKDOWN
   4. **Cost breakdown** (I/O, CPU, Network, Total)
 
 **Output example**:
-'''
-======================================================================
-REQ — Filter 'range/BETWEEN' (with sharding, aligned)
-======================================================================
-Params: {'operator': 'Filter (with sharding)', 'collection': 'Stock', 'output_keys': ['quantity', 'location'], 'filter_key': 'IDW', 'selectivity': 0.15, 'sharding_info': {'nb_shards': 4, 'shard_key': 'IDW', 'distribution': 'uniform'}}
-N_out: 3000000
-avg_doc_size: 48.00 B
-output_size: 144000000 bytes
-Costs: io=2343.75 cpu=20000.0 net=360.00000000000006 total=22703.75
-'''
+<img width="1556" height="211" alt="image" src="https://github.com/user-attachments/assets/ea54e737-1b42-4a46-a745-860ccb0d53ab" />
+
     
 
 ## Exit Codes
