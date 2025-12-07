@@ -256,6 +256,7 @@ COLLECTION SIZE BREAKDOWN
   4. **Cost breakdown** (I/O, CPU, Network, Total)
 
 **Output example**:
+'''
 ======================================================================
 REQ — Filter 'range/BETWEEN' (with sharding, aligned)
 ======================================================================
@@ -264,6 +265,7 @@ N_out: 3000000
 avg_doc_size: 48.00 B
 output_size: 144000000 bytes
 Costs: io=2343.75 cpu=20000.0 net=360.00000000000006 total=22703.75
+'''
     
 
 ## Exit Codes
