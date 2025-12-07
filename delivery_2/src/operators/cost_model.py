@@ -8,7 +8,7 @@ _DEFAULTS = {
     "page_cost": 0.01,
     "cpu_per_tuple": 0.001,
     "cpu_per_comp": 0.001,
-    "net_cost_per_byte": 0.00001,
+    "net_cost_per_byte": 0.0000025,
 }
 
 class CostModel:
@@ -56,3 +56,4 @@ class CostModel:
     def total_cost(self, io_cost: float, cpu_cost: float, network_cost: float) -> float:
         # Total estimated cost
         return max(0.0, io_cost + cpu_cost + network_cost)
+
