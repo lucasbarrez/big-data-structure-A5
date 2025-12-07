@@ -70,7 +70,7 @@ docker-compose up
 
 ```bash
 cd delivery_1
-cd delivery_
+cd delivery_2
 # No external dependencies required, uses only Python 3 stdlib
 ```
 
