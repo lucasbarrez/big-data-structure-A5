@@ -6,6 +6,9 @@ As part of our Big Data Structure course, this project allows you to:
 
 1. **Create Python objects** automatically from a JSON Schema
 2. **Calculate sizes** of documents, collections, and databases
+3. **Estimate execution costs** for operators like Filter and Join
+4. **Simulate distributed (sharded) environments** to compare performance
+5. **Trace and explain computations** through detailed cost and size analysis
 
 This is only the first part of the project. This later aims to package more features, let see what will happen in the next courses...
 
@@ -17,12 +20,22 @@ delivery_1/
 │   ├── main.py                          # Entry point with CLI
 │   ├── services/
 │   │   ├── __init__.py
-│   │   └── delivery_1_service.py        # Main service
+│   │   ├── delivery_1_service.py        # Main service
+│   │   └── delivery_2_service.py        # Main service
 │   └── utils/
 │       ├── __init__.py
 │       ├── load_file.py                 # Factory to load files
 │       ├── schema_builder.py            # Builds dataclasses from JSON Schema
 │       └── size_computer.py             # Computes sizes
+│   ├── operators/
+│   │   ├── __init__.py
+│   │   ├── filter_operator.py           # Filter operator (non-sharded)
+│   │   ├── filter_sharded_operator.py   # Filter operator (sharded)
+│   │   ├── join_nested_operator.py      # Nested loop join (non-sharded)
+│   │   └── join_sharded_operator.py     # Nested loop join (sharded)
+│   ├── queries/
+│   │   ├── __init__.py
+│   │   └── quick_cases.py               # Predefined scenarios (Filter, Join, etc.)
 ├── basic_schema.json                    # Database JSON Schema
 ├── basic_statistic.json                 # Database statistics
 ├── key_sizes.json                       # Type size references
@@ -57,6 +70,7 @@ docker-compose up
 
 ```bash
 cd delivery_1
+cd delivery_
 # No external dependencies required, uses only Python 3 stdlib
 ```
 
@@ -87,6 +101,7 @@ docker-compose up
 
 ```bash
 python3 src/main.py --delivery_1
+python3 src/main.py --delivery_2
 ```
 
 ### Show help
@@ -198,6 +213,8 @@ Defines base sizes for each data type.
 
 The program displays:
 
+  ### Delivery 1:
+
 1. **File loading**: Confirmation of loading the 3 files
 2. **Collection building**: List of created dataclasses with field count
 3. **Size computation**: Database overview
@@ -232,6 +249,22 @@ COLLECTION SIZE BREAKDOWN
       Percentage: 99.58%
       [█████████████████████████████████████████████████]
 ```
+  ### Delivery 2:
+  1. **File loading**
+  2. **Operator & params** (Filter/Join, mode, collection, selectivity)
+  3. **Size estimation** (N_out, avg_doc_size, output_size)
+  4. **Cost breakdown** (I/O, CPU, Network, Total)
+
+**Output example**:
+======================================================================
+REQ — Filter 'range/BETWEEN' (with sharding, aligned)
+======================================================================
+Params: {'operator': 'Filter (with sharding)', 'collection': 'Stock', 'output_keys': ['quantity', 'location'], 'filter_key': 'IDW', 'selectivity': 0.15, 'sharding_info': {'nb_shards': 4, 'shard_key': 'IDW', 'distribution': 'uniform'}}
+N_out: 3000000
+avg_doc_size: 48.00 B
+output_size: 144000000 bytes
+Costs: io=2343.75 cpu=20000.0 net=360.00000000000006 total=22703.75
+    
 
 ## Exit Codes
 
