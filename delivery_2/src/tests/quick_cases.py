@@ -50,7 +50,7 @@ def trace_run(title: str, params: dict, result: dict):
 
 def req_filter_eq_no_sharding(selectivity: float = 0.05):
     params = {"operator": "Filter (no sharding)", "collection": "Product",
-              "output_keys": ["name", "price"], "filter_key": "TOZZZZZZZZZZZZZZZ",
+              "output_keys": ["name", "price"], "filter_key": "brand",
               "selectivity": selectivity}
     res = FilterOperator("Product", ["name", "price"], "brand", selectivity).run()
     trace_run("REQ — Filter '=' (no sharding)", params, res)
@@ -98,3 +98,4 @@ def req_nlj_sharded_compare(join_selectivity: float = 0.001):
           "co-located =", res_local["costs"]["network_cost"],
           "| non co-located =", res_non["costs"]["network_cost"])
     return {"co_located": res_local, "non_co_located": res_non}
+
