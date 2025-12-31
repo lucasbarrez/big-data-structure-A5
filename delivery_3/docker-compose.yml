@@ -1,0 +1,12 @@
+services:
+  big-data-analyzer:
+    build: .
+    image: big-data-structure:latest
+    container_name: big-data-delivery1
+    volumes:
+      - .:/app
+    # Override default command to run delivery_1
+    command: --delivery_1
+    
+    # To use custom files, override with:
+    # command: --delivery_1 --schema custom_schema.json --stats custom_stats.json --sizes custom_sizes.json
