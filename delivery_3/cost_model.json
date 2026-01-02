@@ -1,0 +1,7 @@
+{
+  "page_size": 4096,
+  "page_cost": 0.01,
+  "cpu_per_tuple": 0.001,
+  "cpu_per_comp": 0.001,
+  "net_cost_per_byte": 0.00001
+}
