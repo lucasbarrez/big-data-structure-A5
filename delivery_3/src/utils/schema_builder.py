@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List, Union
 from dataclasses import make_dataclass
 from enum import Enum
+import random
 
 class SchemaBuilder:
     """Build Pythopn object from json schema"""
@@ -144,3 +145,41 @@ class SchemaBuilder:
             "collections": list(self.schema.get("properties", {}).keys()),
             "total_collections": len(self.schema.get("properties", {}))
         }
+    
+    # def generate_docs_from_stats(collection_name: str, statistics: Dict[str, Any]) -> List[Dict[str, Any]]:
+    #     """
+    #     Génère des documents simulés pour une collection à partir de statistics JSON.
+        
+    #     Args:
+    #         collection_name: nom de la collection (ex: "OrderLine")
+    #         statistics: dictionnaire complet des stats JSON
+        
+    #     Returns:
+    #         List[Dict] : liste de documents simulés
+    #     """
+    #     col_stats = statistics["collections"].get(collection_name)
+    #     if not col_stats:
+    #         raise ValueError(f"{collection_name} non trouvé dans les statistics")
+        
+    #     doc_count = col_stats.get("document_count", 0)
+    #     field_stats = col_stats.get("field_specifics", {})
+
+    #     docs = []
+    #     for i in range(doc_count):
+    #         doc = {}
+    #         for field_name, specifics in field_stats.items():
+    #             # générer int, float, str selon avg_length / occurrence_multiplier
+    #             if "avg_length" in specifics:
+    #                 length = specifics.get("avg_length", 10)
+    #                 doc[field_name] = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=length))
+    #             elif "occurrence_multiplier" in specifics:
+    #                 doc[field_name] = i % (specifics["occurrence_multiplier"] * doc_count)
+    #             else:
+    #                 doc[field_name] = i  # simple incrément pour int / id
+                
+    #             # gérer null_percentage
+    #             null_pct = specifics.get("null_percentage", 0)
+    #             if random.random() < null_pct / 100:
+    #                 doc[field_name] = None
+    #         docs.append(doc)
+    #     return docs
