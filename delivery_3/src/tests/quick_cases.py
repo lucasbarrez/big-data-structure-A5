@@ -14,7 +14,7 @@ def _load_json(p: Path):
         return json.load(f)
 
 def _get_n_in(collection: str) -> int:
-    stats = _load_json(_STATs)
+    stats = _load_json(_STATS)
     return int(stats["collections"][collection]["document_count"])
 
 def _avg_projected(result: dict) -> float:

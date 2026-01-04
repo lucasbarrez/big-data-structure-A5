@@ -1,6 +1,7 @@
 
 import json, math
 from pathlib import Path
+from typing import Optional
 
 
 _DEFAULTS = {
@@ -20,7 +21,7 @@ class CostModel:
         self.net_cost_per_byte = cfg.get("net_cost_per_byte", _DEFAULTS["net_cost_per_byte"])
 
     @classmethod
-    def from_file(cls, path: str | None):
+    def from_file(cls, path: Optional[str] = None):
          # Load configuration from file or use defaults
         if path and Path(path).exists():
             with open(path, "r") as f:

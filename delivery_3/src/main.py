@@ -46,6 +46,7 @@ Examples:
         action='store_true',
         help='Run Delivery 2: DVL operators (filter/join, with/without sharding)'
     )
+    ### ici ajouter le delivery 3 ###
 
     
     # File paths
@@ -69,6 +70,7 @@ Examples:
         default='key_sizes.json',
         help='Path to key sizes JSON file (default: key_sizes.json)'
     )
+    ### ici ajouter les paths des besoins pour le delivery 3 ###
     
     # Parse arguments
     args = parser.parse_args()
@@ -123,19 +125,22 @@ Examples:
         success = service.run()
     if args.delivery_2:
         from tests.quick_cases import (
-    req_filter_eq_no_sharding,
-    req_filter_between_sharded_aligned,
-    req_nlj_no_sharding_small,
-    req_nlj_sharded_compare,
-)
+        req_filter_eq_no_sharding,
+        req_filter_between_sharded_aligned,
+        req_nlj_no_sharding_small,
+        req_nlj_sharded_compare,
+        )
+        print("\n" + "="*70)
+        print(" DELIVERY 2: DVL OPERATORS (FILTER/JOIN, WITH/WITHOUT SHARDING)")
+        print("="*70)
 
-    # Choose the Filter
-    req_filter_eq_no_sharding(selectivity=0.05)          # Q2 – "=" sans sharding
-    req_filter_between_sharded_aligned(selectivity=0.15)  # Q1 approx BETWEEN avec sharding
-    req_nlj_no_sharding_small(join_selectivity=0.02)      # Q4 – NLJ sans sharding (petit N si possible)
-    req_nlj_sharded_compare(join_selectivity=0.001)       # Q5 – NLJ avec sharding: compare réseau
+        # Choose the Filter
+        req_filter_eq_no_sharding(selectivity=0.05)          # Q2 – "=" sans sharding
+        req_filter_between_sharded_aligned(selectivity=0.15)  # Q1 approx BETWEEN avec sharding
+        req_nlj_no_sharding_small(join_selectivity=0.02)      # Q4 – NLJ sans sharding (petit N si possible)
+        req_nlj_sharded_compare(join_selectivity=0.001)       # Q5 – NLJ avec sharding: compare réseau
 
-
+    ### ici ajouter le delivery 3 ###
     
     # Exit with appropriate code
     if success:
