@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Union
-from dataclasses import make_dataclass
+from dataclasses import make_dataclass, field
 from enum import Enum
 
 class SchemaBuilder:
@@ -28,17 +28,26 @@ class SchemaBuilder:
         properties = collection_def.get("properties", {})
         required_fields = set(collection_def.get("required", []))
         
-        fields_list = []
+        required_fields_list = []
+        optional_fields_list = []
         
         for field_name, field_def in properties.items():
             field_type = self._get_python_type(field_def, field_name)
             is_required = field_name in required_fields
             
+            # Extract format for metadata
+            json_format = field_def.get("format")
+            metadata = {"format": json_format} if json_format else {}
+            
             if not is_required:
                 field_type = Optional[field_type]
-                fields_list.append((field_name, field_type, None))
+                # Use field() to attach metadata and default value
+                optional_fields_list.append((field_name, field_type, field(default=None, metadata=metadata)))
             else:
-                fields_list.append((field_name, field_type))
+                # Use field() to attach metadata (default is MISSING)
+                required_fields_list.append((field_name, field_type, field(metadata=metadata)))
+        
+        fields_list = required_fields_list + optional_fields_list
         
         new_class = make_dataclass(collection_name, fields_list)
         return new_class
@@ -106,16 +115,24 @@ class SchemaBuilder:
         properties = object_def.get("properties", {})
         required_fields = set(object_def.get("required", []))
         
-        fields_list = []
+        required_fields_list = []
+        optional_fields_list = []
+
         for field_name, field_def in properties.items():
             field_type = self._get_python_type(field_def, field_name)
             is_required = field_name in required_fields
             
+            # Extract format for metadata
+            json_format = field_def.get("format")
+            metadata = {"format": json_format} if json_format else {}
+            
             if not is_required:
                 field_type = Optional[field_type]
-                fields_list.append((field_name, field_type, None))
+                optional_fields_list.append((field_name, field_type, field(default=None, metadata=metadata)))
             else:
-                fields_list.append((field_name, field_type))
+                required_fields_list.append((field_name, field_type, field(metadata=metadata)))
+
+        fields_list = required_fields_list + optional_fields_list
         
         new_class = make_dataclass(class_name, fields_list)
         return new_class
