@@ -1,86 +1,165 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "E-commerce Database",
+  "$schema": "http://json-schema.org/draft-00/schema#",
+  "title": "Denormalized Database Schema",
   "type": "object",
   "properties": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "IDP": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "format": "long_string"
+        },
+        "image_url": {
+          "type": "string"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        },
+        "supplier": {
+          "$ref": "#/definitions/Supplier"
+        }
+      },
+      "required": ["IDP", "name", "price"]
+    },
     "Category": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer" },
-        "title": { "type": "string" }
+        "title": {
+          "type": "string"
+        }
       },
-      "required": []
+      "required": ["title"]
     },
     "Supplier": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer" },
-        "name": { "type": "string" },
-        "SIRET": { "type": "string" },
-        "headOffice": { "type": "string" },
-        "revenue": { "type": "number" }
+        "IDS": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "siret": {
+          "type": "string",
+          "format": "long_string"
+        },
+        "headOffice": {
+          "type": "string"
+        },
+        "Revenue": {
+          "type": "number"
+        }
       },
-      "required": []
-    },
-    "Product": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "integer" },
-        "name": { "type": "string" },
-        "price": { "type": "number" },
-        "brand": { "type": "string" },
-        "description": { "type": "string" },
-        "image_url": { "type": "string", "format": "uri" },
-        "category_id": { "type": "integer" },
-        "supplier_id": { "type": "integer" }
-      },
-      "required": []
-    },
-    "Warehouse": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "integer" },
-        "address": { "type": "string" },
-        "capacity": { "type": "integer", "minimum": 0 }
-      },
-      "required": ["id", "address", "capacity"]
-    },
-    "Client": {
-      "type": "object",
-      "properties": {
-        "id": { "type": "integer" },
-        "last_name": { "type": "string" },
-        "first_name": { "type": "string" },
-        "address": { "type": "string" },
-        "nationality": { "type": "string" },
-        "birth_date": { "type": "string", "format": "date" },
-        "email": { "type": "string", "format": "email" }
-      },
-      "required": []
+      "required": ["IDS", "name"]
     },
     "Stock": {
       "type": "object",
       "properties": {
-        "product_id": { "type": "integer" },
-        "warehouse_id": { "type": "integer" },
-        "quantity": { "type": "integer", "minimum": 0 },
-        "location": { "type": "string" }
+        "quantity": {
+          "type": "number"
+        },
+        "location": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "number"
+        },
+        "warehouse_id": {
+          "type": "number"
+        }
       },
-      "required": []
+      "required": ["quantity", "location", "product_id", "warehouse_id"]
+    },
+    "Warehouse": {
+      "type": "object",
+      "properties": {
+        "IDW": {
+          "type": "number"
+        },
+        "address": {
+          "type": "string"
+        },
+        "capacity": {
+          "type": "number"
+        }
+      },
+      "required": ["IDW", "address", "capacity"]
     },
     "OrderLine": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer" },
-        "client_id": { "type": "integer" },
-        "product_id": { "type": "integer" },
-        "date": { "type": "string", "format": "date" },
-        "quantity": { "type": "integer", "minimum": 1 },
-        "delivery_date": { "type": "string", "format": "date" },
-        "comment": { "type": "string" },
-        "grade": { "type": "number", "minimum": 0, "maximum": 5 }
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "quantity": {
+          "type": "number",
+          "minimum": 1
+        },
+        "deliveryDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "comment": {
+          "type": "string",
+          "format": "long_string"
+        },
+        "product_id": {
+          "type": "number"
+        },
+        "client_id": {
+          "type": "number"
+        },
+        "grade": {
+          "type": "number"
+        }
       },
-      "required": []
+      "required": ["date", "quantity", "product_id", "client_id"]
+    },
+    "Client": {
+      "type": "object",
+      "properties": {
+        "IDC": {
+          "type": "number"
+        },
+        "ln": {
+          "type": "string"
+        },
+        "fn": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "nationality": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      },
+      "required": ["IDC", "ln", "fn", "email"]
     }
   }
 }

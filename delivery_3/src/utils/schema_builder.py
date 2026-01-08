@@ -1,9 +1,8 @@
 import json
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Union
-from dataclasses import make_dataclass
+from dataclasses import make_dataclass, field
 from enum import Enum
-import random
 
 class SchemaBuilder:
     """Build Pythopn object from json schema"""
@@ -29,17 +28,26 @@ class SchemaBuilder:
         properties = collection_def.get("properties", {})
         required_fields = set(collection_def.get("required", []))
         
-        fields_list = []
+        required_fields_list = []
+        optional_fields_list = []
         
         for field_name, field_def in properties.items():
             field_type = self._get_python_type(field_def, field_name)
             is_required = field_name in required_fields
             
+            # Extract format for metadata
+            json_format = field_def.get("format")
+            metadata = {"format": json_format} if json_format else {}
+            
             if not is_required:
                 field_type = Optional[field_type]
-                fields_list.append((field_name, field_type, None))
+                # Use field() to attach metadata and default value
+                optional_fields_list.append((field_name, field_type, field(default=None, metadata=metadata)))
             else:
-                fields_list.append((field_name, field_type))
+                # Use field() to attach metadata (default is MISSING)
+                required_fields_list.append((field_name, field_type, field(metadata=metadata)))
+        
+        fields_list = required_fields_list + optional_fields_list
         
         new_class = make_dataclass(collection_name, fields_list)
         return new_class
@@ -107,16 +115,24 @@ class SchemaBuilder:
         properties = object_def.get("properties", {})
         required_fields = set(object_def.get("required", []))
         
-        fields_list = []
+        required_fields_list = []
+        optional_fields_list = []
+
         for field_name, field_def in properties.items():
             field_type = self._get_python_type(field_def, field_name)
             is_required = field_name in required_fields
             
+            # Extract format for metadata
+            json_format = field_def.get("format")
+            metadata = {"format": json_format} if json_format else {}
+            
             if not is_required:
                 field_type = Optional[field_type]
-                fields_list.append((field_name, field_type, None))
+                optional_fields_list.append((field_name, field_type, field(default=None, metadata=metadata)))
             else:
-                fields_list.append((field_name, field_type))
+                required_fields_list.append((field_name, field_type, field(metadata=metadata)))
+
+        fields_list = required_fields_list + optional_fields_list
         
         new_class = make_dataclass(class_name, fields_list)
         return new_class
@@ -145,41 +161,3 @@ class SchemaBuilder:
             "collections": list(self.schema.get("properties", {}).keys()),
             "total_collections": len(self.schema.get("properties", {}))
         }
-    
-    # def generate_docs_from_stats(collection_name: str, statistics: Dict[str, Any]) -> List[Dict[str, Any]]:
-    #     """
-    #     Génère des documents simulés pour une collection à partir de statistics JSON.
-        
-    #     Args:
-    #         collection_name: nom de la collection (ex: "OrderLine")
-    #         statistics: dictionnaire complet des stats JSON
-        
-    #     Returns:
-    #         List[Dict] : liste de documents simulés
-    #     """
-    #     col_stats = statistics["collections"].get(collection_name)
-    #     if not col_stats:
-    #         raise ValueError(f"{collection_name} non trouvé dans les statistics")
-        
-    #     doc_count = col_stats.get("document_count", 0)
-    #     field_stats = col_stats.get("field_specifics", {})
-
-    #     docs = []
-    #     for i in range(doc_count):
-    #         doc = {}
-    #         for field_name, specifics in field_stats.items():
-    #             # générer int, float, str selon avg_length / occurrence_multiplier
-    #             if "avg_length" in specifics:
-    #                 length = specifics.get("avg_length", 10)
-    #                 doc[field_name] = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=length))
-    #             elif "occurrence_multiplier" in specifics:
-    #                 doc[field_name] = i % (specifics["occurrence_multiplier"] * doc_count)
-    #             else:
-    #                 doc[field_name] = i  # simple incrément pour int / id
-                
-    #             # gérer null_percentage
-    #             null_pct = specifics.get("null_percentage", 0)
-    #             if random.random() < null_pct / 100:
-    #                 doc[field_name] = None
-    #         docs.append(doc)
-    #     return docs

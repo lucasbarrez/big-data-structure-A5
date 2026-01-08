@@ -34,7 +34,8 @@ class SizeComputer:
         field_type: type,
         field_name: str,
         key_sizes: Dict[str, int],
-        field_specifics: Dict[str, Any] = None
+        field_specifics: Dict[str, Any] = None,
+        field_format: str = ""
     ) -> int:
         """
         Compute the size of a single field in bytes
@@ -81,7 +82,8 @@ class SizeComputer:
                 item_type, 
                 f"{field_name}_item",
                 key_sizes,
-                {}
+                {},
+                field_format
             )
             
             # item_size * avg_items
@@ -94,6 +96,10 @@ class SizeComputer:
         elif field_type == str:
             if avg_length:
                 base_size = avg_length
+            elif field_format == "date-time":
+                base_size = key_sizes.get("date", 20)
+            elif field_format == "long_string":
+                base_size = key_sizes.get("long_string", 200)
             else:
                 base_size = key_sizes.get("string", 80)
         
@@ -154,13 +160,15 @@ class SizeComputer:
         # Iterate through all fields
         for field_name, field_info in dataclass_type.__dataclass_fields__.items():
             field_type = field_info.type
+            field_format = field_info.metadata.get("format")
             specifics = field_specifics.get(field_name, {})
             
             field_size = SizeComputer.compute_field_size(
                 field_type,
                 field_name,
                 key_sizes,
-                specifics
+                specifics,
+                field_format
             )
             
             total_size += field_size
@@ -198,9 +206,9 @@ class SizeComputer:
             "document_count": document_count,
             "avg_document_size_bytes": avg_doc_size,
             "total_size_bytes": total_size_bytes,
-            "total_size_kb": total_size_bytes / 1024,
-            "total_size_mb": total_size_bytes / (1024 * 1024),
-            "total_size_gb": total_size_bytes / (1024 * 1024 * 1024)
+            "total_size_kb": total_size_bytes / 1000,
+            "total_size_mb": total_size_bytes / (1000 * 1000),
+            "total_size_gb": total_size_bytes / (1000 * 1000 * 1000)
         }
     
     @staticmethod
@@ -255,10 +263,10 @@ class SizeComputer:
             "total_documents": total_docs,
             "collections": collection_sizes,
             "total_size_bytes": total_bytes,
-            "total_size_kb": total_bytes / 1024,
-            "total_size_mb": total_bytes / (1024 * 1024),
-            "total_size_gb": total_bytes / (1024 * 1024 * 1024),
-            "total_size_tb": total_bytes / (1024 * 1024 * 1024 * 1024)
+            "total_size_kb": total_bytes / 1000,
+            "total_size_mb": total_bytes / (1000 * 1000),
+            "total_size_gb": total_bytes / (1000 * 1000 * 1000),
+            "total_size_tb": total_bytes / (1000 * 1000 * 1000 * 1000)
         }
     
     @staticmethod
@@ -273,7 +281,7 @@ class SizeComputer:
             Formatted string (e.g., "1.5 GB")
         """
         for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
-            if bytes_value < 1024.0:
+            if bytes_value < 1000.0:
                 return f"{bytes_value:.2f} {unit}"
-            bytes_value /= 1024.0
+            bytes_value /= 1000.0
         return f"{bytes_value:.2f} PB"

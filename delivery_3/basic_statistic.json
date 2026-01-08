@@ -5,51 +5,11 @@
         "number_of_servers": 1000
     },
     "collections": {
-        "Category": {
-            "document_count": 10000,
-            "field_specifics": {
-                "title": {
-                    "avg_length": 30
-                },
-                "description": {
-                    "avg_length": 150,
-                    "null_percentage": 20
-                }
-            }
-        },
-        "Supplier": {
-            "document_count": 20000,
-            "field_specifics": {
-                "name": {
-                    "avg_length": 50
-                },
-                "SIRET": {
-                    "avg_length": 14
-                },
-                "headOffice": {
-                    "avg_length": 80
-                }
-            }
-        },
         "Product": {
             "document_count": 100000,
             "field_specifics": {
-                "name": {
-                    "avg_length": 60
-                },
-                "brand": {
-                    "avg_length": 25
-                },
-                "description": {
-                    "avg_length": 200,
-                    "null_percentage": 10
-                },
-                "image_url": {
-                    "avg_length": 100,
-                    "null_percentage": 5
-                },
-                "category_id": {
-                    "occurrence_multiplier": 2
+                "categories": {
+                    "avg_length": 2
                 }
             }
         },
@@ -57,7 +17,6 @@
             "document_count": 200,
             "field_specifics": {
                 "address": {
-                    "avg_length": 80
                 }
             }
         },
@@ -65,19 +24,14 @@
             "document_count": 10000000,
             "field_specifics": {
                 "last_name": {
-                    "avg_length": 20
                 },
                 "first_name": {
-                    "avg_length": 20
                 },
                 "address": {
-                    "avg_length": 80
                 },
                 "nationality": {
-                    "avg_length": 20
                 },
                 "email": {
-                    "avg_length": 30
                 }
             }
         },
@@ -85,8 +39,6 @@
             "document_count": 20000000,
             "field_specifics": {
                 "location": {
-                    "avg_length": 20,
-                    "null_percentage": 10
                 }
             }
         },
@@ -94,11 +46,8 @@
             "document_count": 4000000000,
             "field_specifics": {
                 "comment": {
-                    "avg_length": 100,
-                    "null_percentage": 70
                 },
                 "grade": {
-                    "null_percentage": 50
                 }
             }
         }
